@@ -31,7 +31,13 @@ gulp.task('default', function() {
 });
 
 gulp.task('compile-img', function(){
-  return gulp.src('./src/img/image.png')
+  return gulp.src([
+    './src/img/image.png',
+    './src/img/1.jpeg',
+    './src/img/2.jpg',
+    './src/img/3.jpg',
+    './src/img/svg.svg',
+  ])
     .pipe(gulp.dest('./dist/test/'))
     .pipe(gulp.dest('./dist/prod/'));
 });

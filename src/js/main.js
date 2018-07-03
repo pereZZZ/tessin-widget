@@ -1,10 +1,10 @@
-// var $           = require('jquery');
-// var ui          = require('jquery-ui-browserify');
-// var d3          = require('d3');
-// var ko          = require('knockout');
+var $           = require('jquery');
+var ui          = require('jquery-ui-browserify');
+var d3          = require('d3');
+var ko          = require('knockout');
 
-// use strict;
+use strict;
 
-// $(function() {
-//
-// };
+$(function() {
+
+});
