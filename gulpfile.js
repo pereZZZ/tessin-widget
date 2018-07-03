@@ -32,11 +32,10 @@ gulp.task('default', function() {
 
 gulp.task('compile-img', function(){
   return gulp.src([
-    './src/img/image.png',
     './src/img/1.jpeg',
     './src/img/2.jpg',
     './src/img/3.jpg',
-    './src/img/svg.svg',
+    './src/img/logo.svg',
   ])
     .pipe(gulp.dest('./dist/test/'))
     .pipe(gulp.dest('./dist/prod/'));
@@ -98,8 +97,14 @@ gulp.task('compile-banner', function(cb){
     }))
     .pipe(gulp.dest('./dist/prod/'));
 
-  var zipIt = gulp.src(['./dist/prod/index.html', './dist/prod/image.png'])
-    .pipe(zip('Banner_V1_200x600.zip'))
+  var zipIt = gulp.src([
+    './dist/prod/index.html',
+    './src/img/1.jpeg',
+    './src/img/2.jpg',
+    './src/img/3.jpg',
+    './src/img/logo.svg',
+  ])
+    .pipe(zip('widget.zip'))
     .pipe(gulp.dest('./dist/prod/'));
 
   // var cleanUp = gulp.src(['./dist/prod/banner.html', './dist/prod/image.png'], {read: false})
