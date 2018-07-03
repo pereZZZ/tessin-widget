@@ -10,6 +10,8 @@ var minify       = require('gulp-minifier');
 var browserSync  = require('browser-sync').create();
 var inline       = require('gulp-inline-fonts');
 var concat       = require('gulp-concat');
+var clean = require('gulp-clean');
+const zip        = require('gulp-zip');
 var merge        = require('merge-stream');
 
 gulp.task('default', function() {
@@ -24,7 +26,7 @@ gulp.task('default', function() {
 	});
 
 	gulp.watch('./src/css/**/*.styl', ['compile-styl', 'compile-fonts']);
-	gulp.watch('./src/templates/**/*.html', ['compile-html', 'compile-banner']);
+	gulp.watch('./src/templates/**/*.html', ['compile-styl', 'compile-fonts', 'compile-html', 'compile-banner']);
 
 });
 
@@ -66,7 +68,7 @@ gulp.task('compile-html', function(){
     .pipe(gulp.dest('./dist/test/'));
 });
 
-gulp.task('compile-banner', function(){
+gulp.task('compile-banner', function(cb){
   data = {
     _ADPATH_  : '',
     _ADCLICK_ : '_ADCLICK_',
@@ -76,7 +78,7 @@ gulp.task('compile-banner', function(){
     _ADTIME_  : '_ADTIME_'
 	};
 
-  return gulp.src('./src/templates/inc/banner.html')
+  var banner = gulp.src('./src/templates/inc/index.html')
     .pipe(nunjucks.compile(data))
     .pipe(injectCSS())
     .pipe(minify({
@@ -89,6 +91,16 @@ gulp.task('compile-banner', function(){
       collapseWhitespace: true
     }))
     .pipe(gulp.dest('./dist/prod/'));
+
+  var zipIt = gulp.src(['./dist/prod/index.html', './dist/prod/image.png'])
+    .pipe(zip('Banner_V1_200x600.zip'))
+    .pipe(gulp.dest('./dist/prod/'));
+
+  // var cleanUp = gulp.src(['./dist/prod/banner.html', './dist/prod/image.png'], {read: false})
+  //   .pipe(clean());
+
+  return merge(banner, zipIt);
+
 });
 
 gulp.task('compile-fonts', function() {
