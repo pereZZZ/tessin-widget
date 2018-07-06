@@ -18,6 +18,7 @@ gulp.task('default', function() {
 
 	gulp.run (['compile-styl']);
 	gulp.run (['compile-html']);
+  gulp.run (['compile-html-prod']);
 	gulp.run (['compile-img']);
 	gulp.run (['compile-fonts']);
 
@@ -75,6 +76,31 @@ gulp.task('compile-html', function(){
     .pipe(gulp.dest('./dist/test/'));
 });
 
+gulp.task('compile-html-prod', function(){
+  data = {
+    _ADPATH_  : '',
+    _ADCLICK_ : '_ADCLICK_',
+    _ADCUID_  : '_ADCUID_',
+    _ADADID_  : '_ADADID_',
+    _ADBNID_  : '_ADBNID_',
+    _ADTIME_  : '_ADTIME_'
+  };
+
+  return gulp.src('./src/templates/inc/index.html')
+    .pipe(nunjucks.compile(data))
+    .pipe(injectCSS())
+    .pipe(minify({
+      minify: true,
+      minifyJS: true,
+      uglifyJS: true,
+      uglifyCSS: true,
+      minifyCSS: true,
+      minifyHTML: true,
+      collapseWhitespace: true
+    }))
+    .pipe(gulp.dest('./dist/prod/'));
+});
+
 gulp.task('compile-banner', function(cb){
   data = {
     _ADPATH_  : '',
@@ -120,8 +146,8 @@ gulp.task('compile-banner', function(cb){
 gulp.task('compile-js', function(){
   return gulp.src('./src/js/*.js')
     .pipe(gulpBrowser.browserify())
-    .pipe(gulp.dest('./dist/prod/js/'))
-    .pipe(gulp.dest('./dist/test/js/'));
+    .pipe(gulp.dest('./dist/prod/'))
+    .pipe(gulp.dest('./dist/test/'));
 });
 
 gulp.task('compile-fonts', function() {
