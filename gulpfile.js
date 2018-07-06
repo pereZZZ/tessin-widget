@@ -27,7 +27,7 @@ gulp.task('default', function() {
 
 	gulp.watch('./src/css/**/*.styl', ['compile-styl', 'compile-fonts']);
 	gulp.watch('./src/templates/**/*.html', ['compile-styl', 'compile-fonts', 'compile-html', 'compile-banner']);
-    gulp.watch('./src/js/*.html', ['compile-styl', 'compile-fonts', 'compile-html', 'compile-banner']);
+  gulp.watch('./src/js/*.js', ['compile-js']);
 
 });
 
@@ -117,6 +117,13 @@ gulp.task('compile-banner', function(cb){
 
 });
 
+gulp.task('compile-js', function(){
+  return gulp.src('./src/js/*.js')
+    .pipe(gulpBrowser.browserify())
+    .pipe(gulp.dest('./dist/prod/js/'))
+    .pipe(gulp.dest('./dist/test/js/'));
+});
+
 gulp.task('compile-fonts', function() {
 
   var fontStream = merge();
@@ -131,7 +138,4 @@ gulp.task('compile-fonts', function() {
     .pipe(concat('font.css'))
     .pipe(gulp.dest('./dist/test/'));
 
-  // return gulp.src('./src/fonts/*')
-  //   .pipe(inlineFonts({ name: 'fonts', formats: ['otf'] }))
-  //   .pipe(gulp.dest('./dist/test/'));
 });
